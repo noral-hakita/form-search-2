@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="x-icon" href="admaa.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Form Search - ADMAA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --primary-dark: #2980b9;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --gray: #7f8c8d;
+            --success: #2ecc71;
+            --border: #ddd;
+            --shadow: 0 4px 15px rgba(0,0,0,0.1);
+            --bg-color: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            --form-bg: white;
+            --text-color: #333;
+            --section-bg: #f9fafb;
+            --section-border: #f9fafb;
+            --input-bg: white;
+            --input-border: var(--border);
+        }
+
+        body.dark-theme {
+            --bg-color: #2c3e50;
+            --form-bg: #34495e;
+            --text-color: #ecf0f1;
+            --section-bg: #293a4a;
+            --section-border: #4a637d;
+            --input-bg: #4c6883;
+            --input-border: #5a748c;
+            --border: #5a748c;
+            --gray: #bdc3c7;
+        }
+
+        /* ADMAA THEME WITH CHROMA EFFECTS AND HONEYCOMB TEXTURES */
+        body.admaa-theme {
+            --bg-color: url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20,0 L40,0 L50,20 L40,40 L20,40 L10,20 Z' fill='%23ffcc00' fill-opacity='0.08'/%3E%3Cpath d='M80,0 L100,0 L110,20 L100,40 L80,40 L70,20 Z' fill='%23ffcc00' fill-opacity='0.08'/%3E%3Cpath d='M20,60 L40,60 L50,80 L40,100 L20,100 L10,80 Z' fill='%23ffcc00' fill-opacity='0.08'/%3E%3Cpath d='M80,60 L100,60 L110,80 L100,100 L80,100 L70,80 Z' fill='%23ffcc00' fill-opacity='0.08'/%3E%3C/svg%3E"), linear-gradient(135deg, #FFD700 0%, #FFC400 100%);
+            --form-bg: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffcc00' fill-opacity='0.15' fill-rule='evenodd'/%3E%3C/svg%3E"), linear-gradient(135deg, rgba(255, 215, 0, 0.95) 0%, rgba(255, 196, 0, 0.95) 100%);
+            --text-color: #222222;
+            --section-bg: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,0 L30,0 L35,15 L30,30 L10,30 L5,15 Z' fill='%23ffcc00' fill-opacity='0.1'/%3E%3C/svg%3E"), rgba(255, 215, 0, 0.7);
+            --section-border: linear-gradient(90deg, #FF0000, #00FF00);
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: #FF0000;
+            --border: linear-gradient(90deg, #FF0000, #00FF00);
+            --primary: #FF0000;
+            --primary-dark: #CC0000;
+            --secondary: #008000;
+            --accent: #FF4500;
+            --success: #008000;
+            --gray: #666666;
+            --light: #FFFAF0;
+            --shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        /* ENHANCED ADMAA THEME WITH CHROMA BORDERS */
+        body.admaa-theme .container {
+            border: 4px solid;
+            border-image: linear-gradient(45deg, #FF0000, #00FF00, #FF0000) 1;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.4);
+            background: var(--form-bg);
+            backdrop-filter: blur(3px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20,0 L40,0 L50,20 L40,40 L20,40 L10,20 Z' fill='%23ffcc00' fill-opacity='0.05'/%3E%3C/svg%3E");
+            z-index: 0;
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        body.admaa-theme .search-panel,
+        body.admaa-theme .form-card,
+        body.admaa-theme .qr-info,
+        body.admaa-theme .detail-section {
+            border: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: var(--section-bg);
+            backdrop-filter: blur(2px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .search-panel::before,
+        body.admaa-theme .form-card::before,
+        body.admaa-theme .qr-info::before,
+        body.admaa-theme .detail-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10,0 L30,0 L35,15 L30,30 L10,30 L5,15 Z' fill='%23ffcc00' fill-opacity='0.08'/%3E%3C/svg%3E");
+            z-index: 0;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        body.admaa-theme .search-panel > *,
+        body.admaa-theme .form-card > *,
+        body.admaa-theme .qr-info > *,
+        body.admaa-theme .detail-section > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Enhanced input fields with chroma effect */
+        body.admaa-theme input,
+        body.admaa-theme select,
+        body.admaa-theme .search-input,
+        body.admaa-theme .dropdown-options {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 255, 255, 0.95);
+            transition: all 0.3s ease;
+        }
+
+        body.admaa-theme input:focus,
+        body.admaa-theme select:focus,
+        body.admaa-theme .search-input:focus {
+            border-image: linear-gradient(90deg, #00FF00, #FF0000) 1;
+            box-shadow: 0 0 0 3px rgba(0, 128, 0, 0.2);
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
+        }
+
+        body.admaa-theme .dropdown-options {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .dropdown-option:hover {
+            background: linear-gradient(90deg, rgba(255, 0, 0, 0.2), rgba(0, 255, 0, 0.2));
+        }
+
+        body.admaa-theme .dropdown-option.selected {
+            background: linear-gradient(90deg, #FF0000, #00FF00);
+            color: white;
+        }
+
+        /* Enhanced buttons with chroma effect */
+        body.admaa-theme .btn-primary {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00FF00, #FF0000) 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .btn-primary:hover {
+            background: linear-gradient(135deg, #CC0000, #990000);
+            border-image: linear-gradient(45deg, #FF0000, #00FF00) 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.4);
+        }
+
+        body.admaa-theme .btn-success {
+            background: linear-gradient(135deg, #008000, #006400);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .btn-success:hover {
+            background: linear-gradient(135deg, #006400, #004d00);
+            border-image: linear-gradient(45deg, #00FF00, #FF0000) 1;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 128, 0, 0.4);
+        }
+
+        body.admaa-theme .btn-secondary {
+            background: linear-gradient(135deg, #666666, #4d4d4d);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .btn-secondary:hover {
+            background: linear-gradient(135deg, #4d4d4d, #333333);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced form elements */
+        body.admaa-theme .form-id {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+            color: white;
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #00FF00, #FF0000) 1;
+            font-weight: bold;
+        }
+
+        body.admaa-theme .detail-value {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Pagination with chroma effect */
+        body.admaa-theme .pagination-btn {
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #FF0000, #00FF00) 1;
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+        }
+
+        body.admaa-theme .pagination-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #CC0000, #990000);
+            border-image: linear-gradient(45deg, #00FF00, #FF0000) 1;
+        }
+
+        body.admaa-theme .pagination-btn:disabled {
+            background: linear-gradient(135deg, #666666, #4d4d4d);
+            border-image: linear-gradient(45deg, #666666, #4d4d4d) 1;
+            opacity: 0.7;
+        }
+
+        /* Enhanced headers and sections */
+        body.admaa-theme .header {
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 215, 0, 0.8);
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='50' height='50' viewBox='0 0 50 50' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M15,0 L35,0 L40,15 L35,30 L15,30 L10,15 Z' fill='%23ffcc00' fill-opacity='0.1'/%3E%3C/svg%3E");
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        body.admaa-theme .header > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        body.admaa-theme .results-header {
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .card-header {
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .pagination {
+            border-top: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .footer {
+            border-top: 3px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 215, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        /* Enhanced list view items */
+        body.admaa-theme .list-view .merchant-item {
+            background: var(--section-bg);
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .list-view .merchant-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.3);
+            border-image: linear-gradient(90deg, #00FF00, #FF0000) 1;
+        }
+
+        body.admaa-theme .list-view .merchant-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5,0 L15,0 L17.5,7.5 L15,15 L5,15 L2.5,7.5 Z' fill='%23ffcc00' fill-opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        body.admaa-theme .list-view .merchant-item > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Enhanced back button */
+        body.admaa-theme .back-button {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            border: 2px solid;
+            border-image: linear-gradient(45deg, #FF0000, #00FF00) 1;
+        }
+
+        body.admaa-theme .back-button:hover {
+            background: linear-gradient(135deg, #34495e, #2c3e50);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced detail view sections */
+        .detail-section {
+            background: var(--section-bg);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-left: 6px solid var(--primary);
+        }
+
+        .detail-section-title {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        body.admaa-theme .detail-section-title {
+            color: #008000;
+            border-bottom: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        /* New style for detail view compartments */
+        .detail-compartment {
+            background: var(--input-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid var(--input-border);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        body.admaa-theme .detail-compartment {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 255, 255, 0.95);
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.admaa-theme .detail-compartment::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='25' height='25' viewBox='0 0 25 25' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5,0 L15,0 L17.5,7.5 L15,15 L5,15 L2.5,7.5 Z' fill='%23ffcc00' fill-opacity='0.03'/%3E%3C/svg%3E");
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        body.admaa-theme .detail-compartment > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .compartment-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        body.admaa-theme .compartment-title {
+            color: #FF0000;
+            border-bottom: 1px dashed;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+        }
+
+        /* Enhanced logo styling */
+        body.admaa-theme .logo {
+            color: #FF0000 !important;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 900;
+            background: linear-gradient(45deg, #FF0000, #00FF00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        body.admaa-theme .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #FF0000, #00FF00);
+            border-radius: 2px;
+        }
+
+        /* Enhanced headings */
+        body.admaa-theme h1 {
+            color: #008000;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        body.admaa-theme h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 25%;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, #FF0000, #00FF00, #FF0000);
+            border-radius: 3px;
+        }
+
+        /* Enhanced section titles */
+        body.admaa-theme .section-title {
+            color: #008000;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        body.admaa-theme .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #FF0000, #00FF00);
+            border-radius: 2px;
+        }
+
+        /* Enhanced labels */
+        body.admaa-theme label {
+            color: #008000;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        body.admaa-theme .detail-label {
+            color: #008000;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            padding-left: 10px;
+        }
+
+        body.admaa-theme .detail-label::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: linear-gradient(to bottom, #FF0000, #00FF00);
+            border-radius: 2px;
+        }
+
+        /* Animation for chroma effect */
+        @keyframes chromaGlow {
+            0% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+            50% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.3); }
+            100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.3); }
+        }
+
+        body.admaa-theme .form-card {
+            animation: chromaGlow 3s infinite ease-in-out;
+        }
+
+        /* List view styles */
+        .list-view .merchant-item {
+            background: var(--section-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-view .merchant-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .list-view .merchant-info {
+            flex: 1;
+        }
+
+        .list-view .merchant-name {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+
+        .list-view .merchant-details {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        .list-view .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .list-view .view-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .list-view .view-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        /* Back button */
+        .back-button {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .back-button:hover {
+            background: var(--primary-dark);
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+            background-color: var(--form-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: background-color 0.3s, box-shadow 0.3s, border 0.3s;
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-weight: bold;
+            font-size: 1.8rem;
+            color: var(--primary);
+            transition: color 0.3s;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        h1 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 2.2rem;
+            transition: color 0.3s;
+        }
+        
+        body.dark-theme h1 {
+             color: var(--light);
+        }
+
+        .subtitle {
+            color: var(--gray);
+            font-size: 1rem;
+            margin-top: 0;
+            transition: color 0.3s;
+        }
+
+        .search-panel {
+            background-color: var(--section-bg);
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--primary);
+            transition: border 0.3s;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary);
+            transition: color 0.3s;
+        }
+        
+        body.dark-theme label {
+             color: var(--gray);
+        }
+
+        input[type="text"], input[type="date"], select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+        
+        body.dark-theme input, body.dark-theme select {
+            color: var(--light);
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Searchable dropdown styles */
+        .searchable-select {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .dropdown-options {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--input-bg);
+            position: absolute;
+            width: 100%;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .dropdown-options.show {
+            display: block;
+        }
+
+        .dropdown-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .dropdown-option:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .dropdown-option.selected {
+            background-color: var(--primary-dark);
+            color: white;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #6c757d;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+        }
+
+        .results-container {
+            margin-top: 40px;
+            display: none;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .results-count {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+
+        .form-card {
+            background: var(--section-bg);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            border-left: 4px solid var(--success);
+            transition: transform 0.3s, border 0.3s;
+        }
+
+        .form-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .form-id {
+            background: var(--primary);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .form-date {
+            color: var(--gray);
+            font-size: 14px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-group {
+            margin-bottom: 12px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-size: 14px;
+            color: var(--text-color);
+            font-weight: 500;
+            padding: 8px 12px;
+            background: var(--input-bg);
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .qr-info {
+            background: #e8f4fd;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 3px solid var(--primary);
+        }
+        
+        body.dark-theme .qr-info {
+            background: #293a4a;
+        }
+
+        .qr-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .pagination-btn {
+            padding: 10px 25px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .pagination-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .page-info {
+            font-size: 14px;
+            color: var(--gray);
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .spinner {
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        body.admaa-theme .spinner {
+            border: 4px solid #FFD700;
+            border-top: 4px solid #FF0000;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            color: var(--gray);
+        }
+
+        .no-results i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--gray);
+        }
+
+        #theme-toggle {
+            background-color: var(--secondary);
+            color: var(--light);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #theme-toggle:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .export-btn {
+            background: var(--success);
+            color: white;
+        }
+
+        .export-btn:hover {
+            background: #27ae60;
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        body.dark-theme .section-title {
+             color: var(--light);
+        }
+
+        /* Form Detail View Enhancements */
+        .form-detail-view {
+            background: var(--form-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .detail-compartment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .compartment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .compartment-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        body.admaa-theme .compartment-icon {
+            background: linear-gradient(135deg, #FF0000, #00FF00);
+        }
+
+        .compartment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .compartment-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .field-label {
+            font-size: 12px;
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .field-value {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 12px;
+            background: var(--input-bg);
+            border-radius: 6px;
+            border: 1px solid var(--input-border);
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+        }
+
+        body.admaa-theme .field-value {
+            border: 2px solid;
+            border-image: linear-gradient(90deg, #FF0000, #00FF00) 1;
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-deployed {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .status-closed {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        body.admaa-theme .status-deployed {
+            background: linear-gradient(135deg, #008000, #006400);
+        }
+
+        body.admaa-theme .status-closed {
+            background: linear-gradient(135deg, #FF0000, #CC0000);
+        }
+
+        body.admaa-theme .status-pending {
+            background: linear-gradient(135deg, #FFD700, #FFC400);
+            color: #222;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .detail-compartment-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .pagination {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            #theme-toggle {
+                width: 100%;
+            }
+            
+            .list-view .merchant-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .list-view .merchant-details {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .list-view .view-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .compartment-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="container">
+        <div class="form-header">
+            <div class="logo">ADMAA - Form Search</div>
+            <button id="theme-toggle">
+                <i class="fas fa-moon"></i> Toggle Theme
+            </button>
+        </div>
+        
+        <div class="header">
+            <h1><i class="fas fa-search"></i> Merchant Form Search</h1>
+            <p class="subtitle">Search and view submitted merchant forms from the database</p>
+        </div>
+        
+        <div class="search-panel">
+            <div class="section-title">
+                <i class="fas fa-filter"></i> Search Filters
+            </div>
+            
+            <div class="search-grid">
+                <div class="form-group">
+                    <label><i class="fas fa-calendar"></i> MONTH</label>
+                    <select id="searchMonth">
+                        <option value="">All Months</option>
+                        <option value="JAN">JAN</option>
+                        <option value="FEB">FEB</option>
+                        <option value="APR">APR</option>
+                        <option value="MAY">MAY</option>
+                        <option value="JUN">JUN</option>
+                        <option value="JUL">JUL</option>
+                        <option value="AUG">AUG</option>
+                        <option value="SEP">SEP</option>
+                        <option value="OCT">OCT</option>
+                        <option value="NOV">NOV</option>
+                        <option value="DEC">DEC</option>
+                    </select>
+                </div>
+                
+                <div class="form-group searchable-select">
+                    <label><i class="fas fa-tag"></i> CATEGORY</label>
+                    <input type="text" class="search-input" id="categorySearch" placeholder="Search categories...">
+                    <div class="dropdown-options" id="categoryOptions">
+                        <div class="dropdown-option" data-value="">All Categories</div>
+                        <!-- Categories will be loaded dynamically -->
+                    </div>
+                    <input type="hidden" id="searchCategory" value="">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-map-marker-alt"></i> LOCATION</label>
+                    <select id="searchLocation">
+                        <option value="">All Locations</option>
+                        <!-- Locations will be loaded dynamically -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-university"></i> BANK</label>
+                    <select id="searchBank">
+                        <option value="">All Banks</option>
+                        <option value="ABL">ABL</option>
+                        <option value="AL-BARAKA">AL-BARAKA</option>
+                        <option value="ASKARI">ASKARI</option>
+                        <option value="BAFL">BAFL</option>
+                        <option value="BAHL">BAHL</option>
+                        <option value="BKIP">BKIP</option>
+                        <option value="BML">BML</option>
+                        <option value="BOP">BOP</option>
+                        <option value="DIBL">DIBL</option>
+                        <option value="EASYPAISA">EASYPAISA</option>
+                        <option value="FBL">FBL</option>
+                        <option value="HBL">HBL</option>
+                        <option value="HMB">HMB</option>
+                        <option value="JAZZ CASH">JAZZ CASH</option>
+                        <option value="JS">JS</option>
+                        <option value="MCB">MCB</option>
+                        <option value="MEEZAN">MEEZAN</option>
+                        <option value="NAYAPAY">NAYAPAY</option>
+                        <option value="NBP">NBP</option>
+                        <option value="SCB">SCB</option>
+                        <option value="SCBL">SCBL</option>
+                        <option value="SILK">SILK</option>
+                        <option value="SONBL">SONBL</option>
+                        <option value="SONE">SONE</option>
+                        <option value="UBL">UBL</option>
+                        <option value="UPAISA">UPAISA</option>
+                        <option value="ZINDAGI">ZINDAGI</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-check-circle"></i> STATUS-2</label>
+                    <select id="searchStatus">
+                        <option value="">All Status</option>
+                        <option value="DEPLOYED">DEPLOYED</option>
+                        <option value="CLOSED">CLOSED</option>
+                        <option value="SENT FOR PRINTING">SENT FOR PRINTING</option>
+                        <option value="IBAN RECEIVED">IBAN RECEIVED</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="searchForms()">
+                    <i class="fas fa-search"></i> Search Forms
+                </button>
+                <button class="btn btn-secondary" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> Reset Filters
+                </button>
+                <button class="btn btn-success export-btn" onclick="exportResults()" style="display: none;" id="exportBtn">
+                    <i class="fas fa-download"></i> Export Results
+                </button>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Searching merchant forms...</p>
+        </div>
+        
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2><i class="fas fa-list"></i> Search Results</h2>
+                <div class="results-count" id="resultsCount">Showing 0 results</div>
+            </div>
+            
+            <div id="resultsList"></div>
+            
+            <div class="pagination" id="pagination">
+                <button class="pagination-btn" onclick="previousPage()" id="prevBtn">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span class="page-info" id="pageInfo">Page 1 of 1</span>
+                <button class="pagination-btn" onclick="nextPage()" id="nextBtn">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer" style="margin-top: 40px; text-align: center; padding-top: 20px; border-top: 1px solid var(--border); color: var(--gray);">
+            <p>ADMAA Retail Enablement Service (Pvt.) Ltd.<br>
+            <i class="fas fa-globe"></i> <a href="https://admaa.pk" target="_blank" style="color: var(--primary);">admaa.pk</a> | 
+            <i class="fas fa-phone"></i> 0300-8332737</p>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - Update with your n8n webhook URLs
+        const N8N_SEARCH_WEBHOOK = 'https://noral.gleeze.com/webhook/form-search';
+        const N8N_DYNAMIC_DATA_WEBHOOK = 'https://noral.gleeze.com/webhook/dynamic-data'; // New webhook for dynamic data
+        
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let allForms = [];
+        let filteredForms = [];
+        let currentView = 'list'; // 'list' or 'detail'
+        let currentForm = null;
+
+        // Theme Toggle - Now cycles through 3 themes
+        const themes = ['light-theme', 'dark-theme', 'admaa-theme'];
+        let currentThemeIndex = 0;
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            // Remove all theme classes
+            themes.forEach(theme => {
+                document.body.classList.remove(theme);
+            });
+            
+            // Move to next theme
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const nextTheme = themes[currentThemeIndex];
+            
+            // Apply next theme
+            document.body.classList.add(nextTheme);
+            
+            // Update button text and icon
+            const themeToggle = document.getElementById('theme-toggle');
+            const icon = themeToggle.querySelector('i');
+            
+            switch(nextTheme) {
+                case 'light-theme':
+                    icon.className = 'fas fa-moon';
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+                    break;
+                case 'dark-theme':
+                    icon.className = 'fas fa-palette';
+                    themeToggle.innerHTML = '<i class="fas fa-palette"></i> ADMAA Theme';
+                    break;
+                case 'admaa-theme':
+                    icon.className = 'fas fa-sun';
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+                    break;
+            }
+        });
+
+        // Initialize theme
+        document.body.classList.add(themes[currentThemeIndex]);
+
+        // Function to load dynamic data (categories and locations)
+        async function loadDynamicData() {
+            try {
+                const response = await fetch(N8N_DYNAMIC_DATA_WEBHOOK, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ action: 'get_dynamic_data' })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Update categories dropdown
+                    const categoryOptions = document.getElementById('categoryOptions');
+                    const categorySelect = document.getElementById('searchLocation');
+                    
+                    // Clear existing options except the first one
+                    categoryOptions.innerHTML = '<div class="dropdown-option" data-value="">All Categories</div>';
+                    categorySelect.innerHTML = '<option value="">All Locations</option>';
+                    
+                    // Add dynamic categories
+                    if (data.categories && data.categories.length > 0) {
+                        data.categories.forEach(category => {
+                            const option = document.createElement('div');
+                            option.className = 'dropdown-option';
+                            option.setAttribute('data-value', category);
+                            option.textContent = category;
+                            categoryOptions.appendChild(option);
+                        });
+                    }
+                    
+                    // Add dynamic locations
+                    if (data.locations && data.locations.length > 0) {
+                        data.locations.forEach(location => {
+                            const option = document.createElement('option');
+                            option.value = location;
+                            option.textContent = location;
+                            categorySelect.appendChild(option);
+                        });
+                    }
+                    
+                    // Re-initialize the dropdown functionality
+                    initCategoryDropdown();
+                }
+            } catch (error) {
+                console.error('Error loading dynamic data:', error);
+                // Keep the static options if dynamic loading fails
+            }
+        }
+
+        // Initialize category dropdown functionality
+        function initCategoryDropdown() {
+            const categorySearch = document.getElementById('categorySearch');
+            const categoryOptions = document.getElementById('categoryOptions');
+            const hiddenCategoryInput = document.getElementById('searchCategory');
+            const dropdownOptions = categoryOptions.querySelectorAll('.dropdown-option');
+            
+            // Set initial value
+            hiddenCategoryInput.value = '';
+            
+            categorySearch.addEventListener('focus', function() {
+                categoryOptions.classList.add('show');
+                filterOptions();
+            });
+            
+            categorySearch.addEventListener('input', filterOptions);
+            
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!categorySearch.contains(e.target) && !categoryOptions.contains(e.target)) {
+                    categoryOptions.classList.remove('show');
+                }
+            });
+            
+            // Handle option selection
+            dropdownOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const value = this.getAttribute('data-value');
+                    const text = this.textContent;
+                    
+                    hiddenCategoryInput.value = value;
+                    categorySearch.value = text;
+                    categoryOptions.classList.remove('show');
+                    
+                    // Update selected state
+                    dropdownOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            function filterOptions() {
+                const searchTerm = categorySearch.value.toLowerCase();
+                
+                dropdownOptions.forEach(option => {
+                    const text = option.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        option.style.display = 'block';
+                    } else {
+                        option.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        async function searchForms() {
+            const searchCriteria = {
+                month: document.getElementById('searchMonth').value,
+                category: document.getElementById('searchCategory').value,
+                location: document.getElementById('searchLocation').value,
+                bank: document.getElementById('searchBank').value,
+                status: document.getElementById('searchStatus').value,
+                action: 'search'
+            };
+
+            console.log('=== WEBPAGE DEBUG: Sending search ===');
+            console.log('Search criteria:', searchCriteria);
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultsContainer').style.display = 'none';
+            document.getElementById('exportBtn').style.display = 'none';
+            
+            try {
+                const response = await fetch(N8N_SEARCH_WEBHOOK, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(searchCriteria)
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response OK?', response.ok);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                console.log('=== WEBPAGE DEBUG: Received response ===');
+                console.log('Full response:', data);
+                console.log('Success?', data.success);
+                console.log('Count?', data.count);
+                console.log('Results length?', data.results ? data.results.length : 0);
+                console.log('Message?', data.message);
+                
+                // Hide loading
+                document.getElementById('loading').style.display = 'none';
+                
+                if (data.success && data.results && data.results.length > 0) {
+                    console.log('✓ Will display results');
+                    allForms = data.results;
+                    filteredForms = allForms;
+                    currentPage = 1;
+                    currentView = 'list';
+                    displayListResults();
+                } else {
+                    console.log('✗ Will display NO results');
+                    displayNoResults(data.message || 'No forms found');
+                }
+                
+            } catch (error) {
+                console.error('Search Error:', error);
+                document.getElementById('loading').style.display = 'none';
+                displayError('Error searching forms. Please check the connection and try again.');
+            }
+        }
+
+        function displayListResults() {
+            console.log('=== DISPLAYING LIST RESULTS ===');
+            console.log('Total forms to display:', filteredForms.length);
+            
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            resultsList.className = 'list-view';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageForms = filteredForms.slice(startIndex, endIndex);
+            
+            console.log('Page forms:', pageForms.length);
+            
+            if (pageForms.length === 0) {
+                displayNoResults('No forms to display');
+                return;
+            }
+            
+            pageForms.forEach((form, index) => {
+                console.log(`Creating list item for form ${index}:`, form.merchantName || form.ownerName);
+                
+                const item = document.createElement('div');
+                item.className = 'merchant-item';
+                item.setAttribute('data-index', startIndex + index);
+                
+                item.innerHTML = `
+                    <div class="merchant-info">
+                        <div class="merchant-name">${form.merchantName || form.ownerName || 'Unnamed Merchant'}</div>
+                        <div class="merchant-details">
+                            <div class="detail-item">
+                                <i class="fas fa-calendar"></i>
+                                <span>Month: ${form.month || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Status: ${form.status2 || form.status || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Location: ${form.location || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="fas fa-university"></i>
+                                <span>Bank: ${form.bankName || form.bank || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="view-btn" onclick="viewFormDetails(${startIndex + index})">
+                        <i class="fas fa-eye"></i> View Details
+                    </button>
+                `;
+                
+                // Also make the entire item clickable
+                item.addEventListener('click', function(e) {
+                    // Only trigger if the click wasn't on the button itself
+                    if (!e.target.closest('.view-btn')) {
+                        viewFormDetails(startIndex + index);
+                    }
+                });
+                
+                resultsList.appendChild(item);
+            });
+            
+            updateResultsCount();
+            updatePagination();
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('exportBtn').style.display = 'inline-flex';
+            
+            console.log('✓ List results displayed successfully');
+        }
+
+        function viewFormDetails(index) {
+            console.log('Viewing form details for index:', index);
+            
+            if (index >= 0 && index < filteredForms.length) {
+                currentForm = filteredForms[index];
+                currentView = 'detail';
+                displayFormDetails();
+            }
+        }
+
+        function displayFormDetails() {
+            console.log('=== DISPLAYING FORM DETAILS ===');
+            
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            resultsList.className = 'form-detail-view';
+            
+            // Create back button
+            const backButton = document.createElement('button');
+            backButton.className = 'back-button';
+            backButton.innerHTML = '<i class="fas fa-arrow-left"></i> Back to Results';
+            backButton.onclick = function() {
+                currentView = 'list';
+                displayListResults();
+            };
+            resultsList.appendChild(backButton);
+            
+            if (!currentForm) {
+                resultsList.innerHTML += '<div class="no-results"><p>No form data available</p></div>';
+                return;
+            }
+            
+            // Format MAF Date
+            let mafDate = 'N/A';
+            if (currentForm.mafDate) {
+                try {
+                    const date = new Date(currentForm.mafDate);
+                    mafDate = date.toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                } catch (e) {
+                    console.error('Date parsing error:', e);
+                }
+            }
+            
+            // Determine status badge class
+            let statusClass = 'status-pending';
+            const status = currentForm.status2 || currentForm.status || '';
+            if (status.includes('DEPLOYED')) statusClass = 'status-deployed';
+            else if (status.includes('CLOSED')) statusClass = 'status-closed';
+            
+            // Create the detail view with compartments
+            const detailView = document.createElement('div');
+            detailView.className = 'form-card';
+            
+            detailView.innerHTML = `
+                <div class="card-header">
+                    <div>
+                        <h3 style="margin: 0; color: var(--secondary); display: flex; align-items: center; gap: 15px;">
+                            <i class="fas fa-store" style="color: var(--primary);"></i>
+                            ${currentForm.merchantName || currentForm.ownerName || 'Unnamed Merchant'}
+                            <span class="status-badge ${statusClass}">${status || 'N/A'}</span>
+                        </h3>
+                        <div class="form-date" style="margin-top: 8px;">
+                            <i class="fas fa-calendar-alt"></i> MAF Date: ${mafDate}
+                            <span style="margin-left: 20px;"><i class="fas fa-user-tie"></i> Sales: ${currentForm.salesPerson || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="form-id">S.NO: ${filteredForms.indexOf(currentForm) + 1}</div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <i class="fas fa-id-card"></i> Merchant Information
+                    </div>
+                    <div class="detail-compartment-grid">
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-building"></i> Business Details
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">Merchant Name</div>
+                                    <div class="field-value">${currentForm.merchantName || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Category</div>
+                                    <div class="field-value">${currentForm.category || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Location</div>
+                                    <div class="field-value">${currentForm.location || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Team</div>
+                                    <div class="field-value">${currentForm.team || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Standee Type</div>
+                                    <div class="field-value">${currentForm.standeeType || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-user"></i> Owner Information
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">Owner Name</div>
+                                    <div class="field-value">${currentForm.ownerName || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Father Name</div>
+                                    <div class="field-value">${currentForm.fatherName || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Date of Birth</div>
+                                    <div class="field-value">${currentForm.dob || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">CNIC No</div>
+                                    <div class="field-value">${currentForm.cnicNo || currentForm.cnic || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Phone Number</div>
+                                    <div class="field-value">${currentForm.phoneNumber || currentForm.mobileNumber || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <i class="fas fa-university"></i> Bank & Financial Details
+                    </div>
+                    <div class="detail-compartment-grid">
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-bank"></i> Bank Information
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">Bank Name</div>
+                                    <div class="field-value">${currentForm.bankName || currentForm.bank || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Account Title</div>
+                                    <div class="field-value">${currentForm.accountTitle || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">IBAN Number</div>
+                                    <div class="field-value">${currentForm.ibanNumber || currentForm.iban || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">FBL Reference ID</div>
+                                    <div class="field-value">${currentForm.fblReferenceId || currentForm.referalID || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Converted to UBL/Faysal</div>
+                                    <div class="field-value">${currentForm.convertedTo || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-calendar-check"></i> Dates & Status
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">MAF Date</div>
+                                    <div class="field-value">${currentForm.mafDate || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Month</div>
+                                    <div class="field-value">${currentForm.month || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">IBAN Received Date</div>
+                                    <div class="field-value">${currentForm.ibanReceivedDate || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Status-2</div>
+                                    <div class="field-value">${currentForm.status2 || currentForm.status || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">WhatsApp/Original</div>
+                                    <div class="field-value">${currentForm.whatsappOriginal || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-section-title">
+                        <i class="fas fa-sticky-note"></i> Additional Information
+                    </div>
+                    <div class="detail-compartment-grid">
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-map-marker-alt"></i> Address Details
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">Full Address</div>
+                                    <div class="field-value" style="min-height: 60px;">${currentForm.address || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-compartment">
+                            <div class="compartment-title">
+                                <i class="fas fa-comments"></i> Notes & Remarks
+                            </div>
+                            <div class="compartment-details">
+                                <div class="compartment-field">
+                                    <div class="field-label">Remarks</div>
+                                    <div class="field-value" style="min-height: 60px;">${currentForm.remarks || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Comments</div>
+                                    <div class="field-value" style="min-height: 60px;">${currentForm.comments || 'N/A'}</div>
+                                </div>
+                                <div class="compartment-field">
+                                    <div class="field-label">Hand Over to Sales Staff</div>
+                                    <div class="field-value">${currentForm.handOverToSalesStaff || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="qr-info">
+                    <div class="qr-label">
+                        <i class="fas fa-qrcode"></i> Document References
+                    </div>
+                    <p style="margin: 8px 0; font-size: 13px; color: var(--gray);">
+                        This form includes: Shop Picture, CNIC Front/Back Pictures, and QR Code
+                    </p>
+                    <div style="font-size: 12px; color: var(--gray); margin-top: 8px;">
+                        <i class="fas fa-info-circle"></i> Last Updated: ${currentForm.timestamp || 'N/A'}
+                    </div>
+                </div>
+            `;
+            
+            resultsList.appendChild(detailView);
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('exportBtn').style.display = 'none';
+            
+            console.log('✓ Form details displayed successfully');
+        }
+
+        function updateResultsCount() {
+            const total = filteredForms.length;
+            const start = Math.min((currentPage - 1) * itemsPerPage + 1, total);
+            const end = Math.min(currentPage * itemsPerPage, total);
+            
+            document.getElementById('resultsCount').textContent = 
+                `Showing ${start}-${end} of ${total} form${total !== 1 ? 's' : ''}`;
+        }
+
+        function displayNoResults(message = 'No forms found') {
+            console.log('Displaying no results:', message);
+            
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            resultsList.className = '';
+            
+            resultsList.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>${message}</h3>
+                    <p>Try adjusting your search criteria or try different filters.</p>
+                    <button class="btn btn-secondary" onclick="resetFilters()" style="margin-top: 20px;">
+                        <i class="fas fa-redo"></i> Reset All Filters
+                    </button>
+                </div>
+            `;
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('pagination').style.display = 'none';
+            document.getElementById('exportBtn').style.display = 'none';
+            
+            console.log('No results message displayed');
+        }
+
+        function displayError(message) {
+            console.log('Displaying error:', message);
+            
+            const resultsList = document.getElementById('resultsList');
+            resultsList.innerHTML = '';
+            resultsList.className = '';
+            
+            resultsList.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-exclamation-triangle" style="color: var(--accent);"></i>
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                    <button class="btn btn-primary" onclick="searchForms()" style="margin-top: 20px;">
+                        <i class="fas fa-sync-alt"></i> Try Again
+                    </button>
+                </div>
+            `;
+            document.getElementById('resultsContainer').style.display = 'block';
+            document.getElementById('pagination').style.display = 'none';
+            document.getElementById('exportBtn').style.display = 'none';
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredForms.length / itemsPerPage);
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            
+            document.getElementById('prevBtn').disabled = currentPage === 1;
+            document.getElementById('nextBtn').disabled = currentPage === totalPages;
+            
+            document.getElementById('pagination').style.display = totalPages > 1 ? 'flex' : 'none';
+        }
+
+        function nextPage() {
+            const totalPages = Math.ceil(filteredForms.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                if (currentView === 'list') {
+                    displayListResults();
+                }
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                if (currentView === 'list') {
+                    displayListResults();
+                }
+            }
+        }
+
+        function resetFilters() {
+            document.getElementById('searchMonth').value = '';
+            document.getElementById('searchCategory').value = '';
+            document.getElementById('categorySearch').value = '';
+            document.getElementById('searchLocation').value = '';
+            document.getElementById('searchBank').value = '';
+            document.getElementById('searchStatus').value = '';
+            
+            // Reset category dropdown
+            const categoryOptions = document.getElementById('categoryOptions');
+            const dropdownOptions = categoryOptions.querySelectorAll('.dropdown-option');
+            dropdownOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                opt.style.display = 'block';
+            });
+            
+            // Select "All Categories" option
+            if (dropdownOptions[0]) {
+                dropdownOptions[0].classList.add('selected');
+                document.getElementById('categorySearch').value = 'All Categories';
+            }
+            
+            document.getElementById('resultsContainer').style.display = 'none';
+            allForms = [];
+            filteredForms = [];
+            currentPage = 1;
+            currentView = 'list';
+            currentForm = null;
+            document.getElementById('exportBtn').style.display = 'none';
+            
+            console.log('Filters reset');
+        }
+
+        function exportResults() {
+            if (filteredForms.length === 0) {
+                alert('No results to export.');
+                return;
+            }
+            
+            // Convert to CSV with new column headers
+            const headers = [
+                'S.NO', 'MAF DATE', 'MONTH', 'SALES PERSON', 'MERCHANT NAME',
+                'CATEGORY', 'LOCATION', 'TEAM', 'STANDEE TYPE', 'OWNER NAME',
+                'FATHER NAME', 'ADDRESS', 'DOB', 'CNIC NO', 'PHONE NUMBER',
+                'BANK NAME', 'IBAN NUMBER', 'IBAN RECEIVED DATE', 'CONVERTED TO UBL/FAYSAL',
+                'ACCOUNT TITLE', 'REMARKS', 'STATUS-2', 'WHATSAPP/ORIGINAL', 'COMMENTS',
+                'HAND OVER TO SALES STAFF', 'FBL REFERENCE ID', 'TIMESTAMP'
+            ];
+            
+            const csvData = filteredForms.map((form, index) => [
+                index + 1,
+                form.mafDate || '',
+                form.month || '',
+                form.salesPerson || '',
+                form.merchantName || '',
+                form.category || '',
+                form.location || '',
+                form.team || '',
+                form.standeeType || '',
+                form.ownerName || '',
+                form.fatherName || '',
+                form.address || '',
+                form.dob || '',
+                form.cnicNo || form.cnic || '',
+                form.phoneNumber || form.mobileNumber || '',
+                form.bankName || form.bank || '',
+                form.ibanNumber || form.iban || '',
+                form.ibanReceivedDate || '',
+                form.convertedTo || '',
+                form.accountTitle || '',
+                form.remarks || '',
+                form.status2 || form.status || '',
+                form.whatsappOriginal || '',
+                form.comments || '',
+                form.handOverToSalesStaff || '',
+                form.fblReferenceId || form.referalID || '',
+                form.timestamp || ''
+            ]);
+            
+            const csvContent = [
+                headers.join(','),
+                ...csvData.map(row => row.map(cell => `"${cell}"`).join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            
+            link.setAttribute('href', url);
+            link.setAttribute('download', `merchant_forms_${new Date().toISOString().split('T')[0]}.csv`);
+            link.style.visibility = 'hidden';
+            
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            alert(`Exported ${filteredForms.length} forms successfully.`);
+        }
+
+        // Allow Enter key to trigger search in any input field
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchForms();
+                }
+            });
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize category dropdown
+            initCategoryDropdown();
+            
+            // Load dynamic data (categories and locations)
+            loadDynamicData();
+            
+            // Also reload dynamic data every 5 minutes to keep it updated
+            setInterval(loadDynamicData, 5 * 60 * 1000);
+        });
+        
+        console.log('Webpage JavaScript loaded successfully');
+    </script>
+</body>
+</html>
