@@ -92,7 +92,7 @@
         // Month order for display/sorting (important for line chart)
         const MONTH_ORDER = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-        // Theme Toggle and Initialization (Keep this logic)
+        // Theme Toggle and Initialization 
         const themes = ['light-theme', 'dark-theme', 'admaa-theme'];
         let currentThemeIndex = 0;
 
@@ -108,7 +108,6 @@
                 case 'dark-theme': themeToggle.innerHTML = '<i class="fas fa-palette"></i> ADMAA Theme'; break;
                 case 'admaa-theme': themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode'; break;
             }
-            // Always reload the data and charts on theme change
             loadDashboardData(); 
         });
         document.body.classList.add(themes[currentThemeIndex]);
@@ -120,12 +119,10 @@
         // Function to destroy and initialize a new Chart.js instance
         function createChart(ctx, type, data, options) {
             let chartInstance;
-            // Check if a chart is already associated with this canvas context
             if (ctx.chart) {
                 // Explicitly destroy the old chart instance to prevent "Canvas is already in use" error
                 ctx.chart.destroy(); 
             }
-            // Create the new chart
             chartInstance = new Chart(ctx, { type, data, options });
             return chartInstance;
         }
@@ -208,14 +205,16 @@
                     startAutoRefresh();
                 } else {
                     // WARNING: Fetch successful, but data is empty or malformed
-                    console.warn('Webhook returned data in unexpected format or was empty.');
+                    console.warn('Webhook returned data in unexpected format or was empty. Logging received data below:');
+                    console.log('Received data:', data); // <-- THIS IS THE KEY DEBUG LINE
+                    
                     // Fallback to show zeros/empty charts without crashing
                     processAnalyticsData(null, fromMonth, toMonth); 
                 }
                 
             } catch (error) {
-                // This catch handles network errors, CORS issues, or non-200 HTTP responses.
-                console.error('Error loading dashboard data (Network/Server failure):', error);
+                // This catch handles network errors, CORS issues, or JSON Parse failures.
+                console.error('Error loading dashboard data (Network/Server failure OR JSON Parse Error):', error);
                 
                 // Fallback to showing zeros and empty charts
                 updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
@@ -230,8 +229,7 @@
             if (!summaryData) {
                 // If data is null (e.g., from the warning block above)
                 updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
-                // *** CRITICAL FIX HERE ***: We rely on the catch block or initial load 
-                // to call initializeEmptyCharts. Calling it here causes the conflict.
+                // We rely on the catch block or initial load to initialize charts.
                 return;
             }
 
@@ -254,15 +252,10 @@
             });
 
             // Define which statuses map to which dashboard metric
-            // Note: I've added HANDED OVER TO SALES STAFF to pending based on typical workflow
             const pendingStatuses = ['SENT FOR PRINTING', 'IBAN RECEIVED', 'PENDING', 'HANDED OVER TO SALES STAFF', 'PRINTED AT OFFICE', 'WAITING'];
 
-            // Find the count for statuses that mean "Deployed"
             const deployedForms = statusMap['DEPLOYED'] || 0;
-            
-            // Sum up the counts for all statuses considered "In Progress/Pending"
             const pendingForms = pendingStatuses.reduce((sum, status) => sum + (statusMap[status] || 0), 0);
-            
             const closedForms = statusMap['CLOSED'] || 0;
             
             return {
@@ -334,7 +327,6 @@
         function updateCharts(charts) {
             // Monthly Chart
             const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-            // We use monthlyChart.options because it retains the scaling and plugin settings
             monthlyChart = createChart(monthlyCtx, 'line', {
                 labels: charts.monthly.labels,
                 datasets: [{
