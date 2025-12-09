@@ -177,7 +177,7 @@
             }, commonOptions);
         }
 
-        // Function to load dashboard data from your n8n webhook
+        // Function to load dashboard data from your n8n webhook (REVISED FOR OBJECT FORMAT)
         async function loadDashboardData() {
             const fromMonth = document.getElementById('fromMonth').value;
             const toMonth = document.getElementById('toMonth').value;
@@ -198,15 +198,22 @@
                 
                 const data = await response.json();
                 
-                // CRITICAL CHECK: Based on the confirmed JSON structure
-                if (Array.isArray(data) && data.length > 0 && data[0].totalForms !== undefined) {
-                    // SUCCESS: Data structure is perfect
-                    processAnalyticsData(data[0], fromMonth, toMonth);
+                let summaryData = data;
+                
+                // 1. If data is an array (n8n "All entries JSON"), use the first item.
+                if (Array.isArray(data) && data.length > 0) {
+                    summaryData = data[0];
+                }
+                
+                // 2. Check if the final summaryData is a non-null object with totalForms
+                if (summaryData && typeof summaryData === 'object' && summaryData.totalForms !== undefined) {
+                    // SUCCESS: Process the data, regardless of if it came as Array or Object
+                    processAnalyticsData(summaryData, fromMonth, toMonth);
                     startAutoRefresh();
                 } else {
                     // WARNING: Fetch successful, but data is empty or malformed
                     console.warn('Webhook returned data in unexpected format or was empty. Logging received data below:');
-                    console.log('Received data:', data); // <-- THIS IS THE KEY DEBUG LINE
+                    console.log('Received data:', data); 
                     
                     // Fallback to show zeros/empty charts without crashing
                     processAnalyticsData(null, fromMonth, toMonth); 
@@ -229,7 +236,6 @@
             if (!summaryData) {
                 // If data is null (e.g., from the warning block above)
                 updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
-                // We rely on the catch block or initial load to initialize charts.
                 return;
             }
 
