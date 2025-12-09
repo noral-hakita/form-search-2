@@ -112,7 +112,7 @@
         });
         document.body.classList.add(themes[currentThemeIndex]);
 
-        // Chart instances
+        // Chart instances declared globally
         let monthlyChart, statusChart, bankChart;
         let autoRefreshInterval;
 
@@ -120,14 +120,20 @@
         function createChart(ctx, type, data, options) {
             let chartInstance;
             if (ctx.chart) {
-                ctx.chart.destroy();
+                // Explicitly destroy the old chart instance
+                ctx.chart.destroy(); 
             }
             chartInstance = new Chart(ctx, { type, data, options });
             return chartInstance;
         }
 
-        // Initialize empty charts
+        // Initialize empty charts (with destruction logic integrated)
         function initializeEmptyCharts() {
+            // Check and destroy existing charts before creating new ones
+            if (monthlyChart) monthlyChart.destroy();
+            if (statusChart) statusChart.destroy();
+            if (bankChart) bankChart.destroy();
+            
             const commonOptions = {
                 responsive: true, maintainAspectRatio: false,
                 plugins: { legend: { labels: { font: { size: 11 } } } },
@@ -179,43 +185,38 @@
             try {
                 // Clear existing stats while fetching
                 updateStats({ totalForms: '...', deployedForms: '...', pendingForms: '...', closedForms: '...' });
-        
+
                 const response = await fetch(N8N_DASHBOARD_WEBHOOK, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'get_dashboard_data', fromMonth: fromMonth, toMonth: toMonth })
                 });
-        
+                
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
                 const data = await response.json();
                 
-                // --- REVISED CONDITION (FIX 1) ---
-                // Check if data is an array, has at least one item, and that item contains totalForms.
+                // CRITICAL FIX: Check if data is an array, has at least one item, and that item contains totalForms.
                 if (Array.isArray(data) && data.length > 0 && data[0].totalForms !== undefined) {
                     // Process the pre-aggregated data from n8n
                     processAnalyticsData(data[0], fromMonth, toMonth);
                     startAutoRefresh();
                 } else {
                     console.warn('Webhook returned data in unexpected format or was empty.');
-                    processAnalyticsData(null, fromMonth, toMonth);
-                    // DO NOT THROW AN ERROR HERE (FIX 2) - let the dashboard display zeros instead.
+                    // Process null data to show zeros/empty charts without throwing an error
+                    processAnalyticsData(null, fromMonth, toMonth); 
+                    // Do not throw a new error here, just rely on processAnalyticsData to handle the fallback
                 }
                 
             } catch (error) {
-                // The console will show the fetch error (e.g., Network, CORS, or HTTP status error)
+                // This catch handles network errors, CORS issues, or non-200 HTTP responses.
                 console.error('Error loading dashboard data (Network/Server failure):', error);
                 
-                // Show zeros on failure.
+                // Fallback to showing zeros and initializing empty charts
                 updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
-                
-                // Minor optimization: only re-initialize if charts are already defined,
-                // which prevents the 'Canvas already in use' error chain.
-                if (monthlyChart) {
-                    initializeEmptyCharts(); 
-                }
+                initializeEmptyCharts(); // Call this here to show empty charts on failure
                 
                 if (autoRefreshInterval) clearInterval(autoRefreshInterval); 
             }
@@ -224,6 +225,7 @@
         // Process the structured data from n8n
         function processAnalyticsData(summaryData, fromMonth, toMonth) {
             if (!summaryData) {
+                // If data is null (e.g., from the warning block above)
                 updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
                 initializeEmptyCharts();
                 return;
@@ -268,18 +270,14 @@
         function prepareRealCharts(months, statuses, banks, fromMonth, toMonth) {
             
             // --- Monthly Chart Data (Line Chart) ---
-            
-            // 1. Create a map for quick lookup
             const monthlyMap = months.reduce((acc, item) => {
                 acc[item.month] = item.count;
                 return acc;
             }, {});
             
-            // 2. Determine filter range
             let fromIndex = fromMonth ? MONTH_ORDER.indexOf(fromMonth) : 0;
             let toIndex = toMonth ? MONTH_ORDER.indexOf(toMonth) : MONTH_ORDER.length - 1;
             
-            // 3. Filter months and create data array based on MONTH_ORDER
             const monthsToShow = MONTH_ORDER.slice(fromIndex, toIndex + 1);
             const monthlyData = monthsToShow.map(month => monthlyMap[month] || 0);
             const monthLabels = monthsToShow.map(month => month.charAt(0) + month.slice(1).toLowerCase());
@@ -393,9 +391,12 @@
         // Initialize dashboard
         document.addEventListener('DOMContentLoaded', function() {
             setDefaultMonths();
-            initializeEmptyCharts();
+            // Initialize empty charts once at the start
+            initializeEmptyCharts(); 
+            // Load initial data
             loadDashboardData();
             
+            // Attach event listeners to filters to automatically reload data
             document.getElementById('fromMonth').addEventListener('change', loadDashboardData);
             document.getElementById('toMonth').addEventListener('change', loadDashboardData);
             
