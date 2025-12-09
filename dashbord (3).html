@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        body { font-family: sans-serif; transition: background-color 0.3s, color 0.3s; margin: 0; padding: 20px; }
+        .light-theme { background-color: #f4f4f4; color: #333; }
+        .dark-theme { background-color: #333; color: #f4f4f4; }
+        .admaa-theme { background-color: #c9e6ff; color: #002d5b; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .filters { display: flex; gap: 10px; align-items: center; }
+        .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center; }
+        .dark-theme .stat-card { background: #444; box-shadow: 0 4px 8px rgba(255,255,255,0.1); }
+        .admaa-theme .stat-card { background: #e0f0ff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .stat-value { font-size: 2.5em; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 0.9em; color: #777; }
+        .dark-theme .stat-label { color: #ccc; }
+        .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .chart-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .chart-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); height: 400px; }
+        .dark-theme .chart-container { background: #444; box-shadow: 0 4px 8px rgba(255,255,255,0.1); }
+        .admaa-theme .chart-container { background: #e0f0ff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        #theme-toggle { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; background: #3498db; color: white; }
+    </style>
+</head>
+<body class="light-theme">
+    <div class="header">
+        <h1>Dashboard</h1>
+        <div class="filters">
+            <label for="fromMonth">From:</label>
+            <select id="fromMonth">
+                <option value="JAN">Jan</option><option value="FEB">Feb</option><option value="MAR">Mar</option>
+                <option value="APR">Apr</option><option value="MAY">May</option><option value="JUN">Jun</option>
+                <option value="JUL">Jul</option><option value="AUG">Aug</option><option value="SEP">Sep</option>
+                <option value="OCT">Oct</option><option value="NOV">Nov</option><option value="DEC">Dec</option>
+            </select>
+            <label for="toMonth">To:</label>
+            <select id="toMonth">
+                <option value="JAN">Jan</option><option value="FEB">Feb</option><option value="MAR">Mar</option>
+                <option value="APR">Apr</option><option value="MAY">May</option><option value="JUN">Jun</option>
+                <option value="JUL">Jul</option><option value="AUG">Aug</option><option value="SEP">Sep</option>
+                <option value="OCT">Oct</option><option value="NOV">Nov</option><option value="DEC">Dec</option>
+            </select>
+            <button onclick="loadDashboardData()">Apply Filter</button>
+            <button id="theme-toggle"><i class="fas fa-moon"></i> Dark Mode</button>
+        </div>
+    </div>
+    
+    <div class="grid">
+        <div class="stat-card">
+            <div id="totalForms" class="stat-value">0</div>
+            <div class="stat-label">Total Submissions</div>
+        </div>
+        <div class="stat-card">
+            <div id="deployedForms" class="stat-value">0</div>
+            <div class="stat-label">Deployed Forms</div>
+        </div>
+        <div class="stat-card">
+            <div id="pendingForms" class="stat-value">0</div>
+            <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+            <div id="closedForms" class="stat-value">0</div>
+            <div class="stat-label">Closed Forms</div>
+        </div>
+    </div>
+
+    <div class="chart-grid">
+        <div class="chart-container">
+            <h3>Monthly Submissions</h3>
+            <canvas id="monthlyChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Status Distribution</h3>
+            <canvas id="statusChart"></canvas>
+        </div>
+    </div>
+    <div class="chart-container" style="margin-top: 20px;">
+        <h3>Top Banks</h3>
+        <canvas id="bankChart"></canvas>
+    </div>
+
+    <script>
+        // Configuration - Use your existing n8n webhook for dashboard data
+        const N8N_DASHBOARD_WEBHOOK = 'https://noral.gleeze.com/webhook/dashbord';
+        
+        // Month order for display/sorting (important for line chart)
+        const MONTH_ORDER = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+        // Theme Toggle and Initialization (Keep this logic)
+        const themes = ['light-theme', 'dark-theme', 'admaa-theme'];
+        let currentThemeIndex = 0;
+
+        document.getElementById('theme-toggle').addEventListener('click', () => {
+            themes.forEach(theme => { document.body.classList.remove(theme); });
+            currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+            const nextTheme = themes[currentThemeIndex];
+            document.body.classList.add(nextTheme);
+            
+            const themeToggle = document.getElementById('theme-toggle');
+            switch(nextTheme) {
+                case 'light-theme': themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode'; break;
+                case 'dark-theme': themeToggle.innerHTML = '<i class="fas fa-palette"></i> ADMAA Theme'; break;
+                case 'admaa-theme': themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode'; break;
+            }
+            loadDashboardData(); // Reload charts for color update
+        });
+        document.body.classList.add(themes[currentThemeIndex]);
+
+        // Chart instances
+        let monthlyChart, statusChart, bankChart;
+        let autoRefreshInterval;
+
+        // Function to destroy and initialize a new Chart.js instance
+        function createChart(ctx, type, data, options) {
+            let chartInstance;
+            if (ctx.chart) {
+                ctx.chart.destroy();
+            }
+            chartInstance = new Chart(ctx, { type, data, options });
+            return chartInstance;
+        }
+
+        // Initialize empty charts
+        function initializeEmptyCharts() {
+            const commonOptions = {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { labels: { font: { size: 11 } } } },
+                scales: { 
+                    y: { beginAtZero: true, ticks: { font: { size: 10 } } },
+                    x: { ticks: { font: { size: 10 }, maxRotation: 45, minRotation: 45 } }
+                }
+            };
+            
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            monthlyChart = createChart(monthlyCtx, 'line', {
+                labels: MONTH_ORDER.map(m => m.charAt(0) + m.slice(1).toLowerCase()),
+                datasets: [{
+                    label: 'Forms Submitted',
+                    data: Array(12).fill(0),
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderWidth: 2, fill: true, tension: 0.3, pointRadius: 3, pointHoverRadius: 5
+                }]
+            }, commonOptions);
+
+            // Status Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            statusChart = createChart(statusCtx, 'doughnut', {
+                labels: ['Loading Data'],
+                datasets: [{ data: [1], backgroundColor: ['rgba(200, 200, 200, 0.5)'] }]
+            }, {
+                responsive: true, maintainAspectRatio: false, cutout: '60%',
+                plugins: { 
+                    legend: { position: 'bottom', labels: { padding: 10, font: { size: 10 } } },
+                    tooltip: { callbacks: { label: (c) => `${c.label}: ${c.raw} (${Math.round((c.raw / c.dataset.data.reduce((a, b) => a + b, 0)) * 100)}%)` } }
+                }
+            });
+
+            // Bank Chart
+            const bankCtx = document.getElementById('bankChart').getContext('2d');
+            bankChart = createChart(bankCtx, 'bar', {
+                labels: ['Loading Data'],
+                datasets: [{ label: 'Forms', data: [0], backgroundColor: 'rgba(200, 200, 200, 0.5)' }]
+            }, commonOptions);
+        }
+
+        // Function to load dashboard data from your n8n webhook
+        async function loadDashboardData() {
+            const fromMonth = document.getElementById('fromMonth').value;
+            const toMonth = document.getElementById('toMonth').value;
+            
+            try {
+                // Clear existing stats while fetching
+                updateStats({ totalForms: '...', deployedForms: '...', pendingForms: '...', closedForms: '...' });
+        
+                const response = await fetch(N8N_DASHBOARD_WEBHOOK, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'get_dashboard_data', fromMonth: fromMonth, toMonth: toMonth })
+                });
+        
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // --- REVISED CONDITION (FIX 1) ---
+                // Check if data is an array, has at least one item, and that item contains totalForms.
+                if (Array.isArray(data) && data.length > 0 && data[0].totalForms !== undefined) {
+                    // Process the pre-aggregated data from n8n
+                    processAnalyticsData(data[0], fromMonth, toMonth);
+                    startAutoRefresh();
+                } else {
+                    console.warn('Webhook returned data in unexpected format or was empty.');
+                    processAnalyticsData(null, fromMonth, toMonth);
+                    // DO NOT THROW AN ERROR HERE (FIX 2) - let the dashboard display zeros instead.
+                }
+                
+            } catch (error) {
+                // The console will show the fetch error (e.g., Network, CORS, or HTTP status error)
+                console.error('Error loading dashboard data (Network/Server failure):', error);
+                
+                // Show zeros on failure.
+                updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
+                
+                // Minor optimization: only re-initialize if charts are already defined,
+                // which prevents the 'Canvas already in use' error chain.
+                if (monthlyChart) {
+                    initializeEmptyCharts(); 
+                }
+                
+                if (autoRefreshInterval) clearInterval(autoRefreshInterval); 
+            }
+        }
+
+        // Process the structured data from n8n
+        function processAnalyticsData(summaryData, fromMonth, toMonth) {
+            if (!summaryData) {
+                updateStats({ totalForms: 0, deployedForms: 0, pendingForms: 0, closedForms: 0 });
+                initializeEmptyCharts();
+                return;
+            }
+
+            // 1. Prepare Stats
+            const stats = calculateRealStats(summaryData.statuses, summaryData.totalForms);
+            
+            // 2. Prepare Charts
+            const charts = prepareRealCharts(summaryData.months, summaryData.statuses, summaryData.banks, fromMonth, toMonth);
+            
+            // 3. Update UI
+            updateStats(stats);
+            updateCharts(charts);
+        }
+
+        // Calculate Stats from pre-aggregated status data
+        function calculateRealStats(statusArray, totalForms) {
+            const statusMap = {};
+            statusArray.forEach(s => {
+                statusMap[s.status] = s.count;
+            });
+
+            // Define which statuses map to which dashboard metric
+            const pendingStatuses = ['SENT FOR PRINTING', 'IBAN RECEIVED'];
+
+            const deployedForms = statusMap['DEPLOYED'] || 0;
+            
+            const pendingForms = pendingStatuses.reduce((sum, status) => sum + (statusMap[status] || 0), 0);
+            
+            const closedForms = statusMap['CLOSED'] || 0;
+            
+            return {
+                totalForms: totalForms || 0,
+                deployedForms: deployedForms,
+                pendingForms: pendingForms,
+                closedForms: closedForms,
+            };
+        }
+
+        // Prepare charts from pre-aggregated monthly, status, and bank data
+        function prepareRealCharts(months, statuses, banks, fromMonth, toMonth) {
+            
+            // --- Monthly Chart Data (Line Chart) ---
+            
+            // 1. Create a map for quick lookup
+            const monthlyMap = months.reduce((acc, item) => {
+                acc[item.month] = item.count;
+                return acc;
+            }, {});
+            
+            // 2. Determine filter range
+            let fromIndex = fromMonth ? MONTH_ORDER.indexOf(fromMonth) : 0;
+            let toIndex = toMonth ? MONTH_ORDER.indexOf(toMonth) : MONTH_ORDER.length - 1;
+            
+            // 3. Filter months and create data array based on MONTH_ORDER
+            const monthsToShow = MONTH_ORDER.slice(fromIndex, toIndex + 1);
+            const monthlyData = monthsToShow.map(month => monthlyMap[month] || 0);
+            const monthLabels = monthsToShow.map(month => month.charAt(0) + month.slice(1).toLowerCase());
+            
+
+            // --- Status Chart Data (Doughnut Chart) ---
+            const statusLabels = statuses.map(s => s.status);
+            const statusData = statuses.map(s => s.count);
+            
+            const statusColors = statuses.map(s => {
+                switch(s.status) {
+                    case 'DEPLOYED': return '#2ecc71'; 
+                    case 'CLOSED': return '#e74c3c'; 
+                    case 'IBAN RECEIVED': 
+                    case 'SENT FOR PRINTING': 
+                    case 'PENDING': return '#f39c12'; 
+                    default: return '#3498db'; 
+                }
+            });
+
+            // --- Bank Chart Data (Bar Chart) ---
+            const topBanks = banks
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 6);
+                
+            const bankLabels = topBanks.map(b => b.bank);
+            const bankData = topBanks.map(b => b.count);
+            const bankColors = ['#3498db', '#2ecc71', '#f39c12', '#e74c3c', '#9b59b6', '#1abc9c'];
+            
+            return {
+                monthly: { labels: monthLabels, data: monthlyData },
+                status: { labels: statusLabels, data: statusData, colors: statusColors },
+                bank: { labels: bankLabels, data: bankData, colors: bankColors }
+            };
+        }
+
+        // Update statistics cards
+        function updateStats(stats) {
+            document.getElementById('totalForms').textContent = stats.totalForms.toLocaleString();
+            document.getElementById('deployedForms').textContent = stats.deployedForms.toLocaleString();
+            document.getElementById('pendingForms').textContent = stats.pendingForms.toLocaleString();
+            document.getElementById('closedForms').textContent = stats.closedForms.toLocaleString();
+        }
+
+        // Update charts
+        function updateCharts(charts) {
+            // Monthly Chart
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            monthlyChart = createChart(monthlyCtx, 'line', {
+                labels: charts.monthly.labels,
+                datasets: [{
+                    label: 'Forms Submitted',
+                    data: charts.monthly.data,
+                    borderColor: '#3498db',
+                    backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                    borderWidth: 2, fill: true, tension: 0.3, pointRadius: 3, pointHoverRadius: 5
+                }]
+            }, monthlyChart.options); 
+
+            // Status Chart
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            statusChart = createChart(statusCtx, 'doughnut', {
+                labels: charts.status.labels,
+                datasets: [{
+                    data: charts.status.data,
+                    backgroundColor: charts.status.colors,
+                    borderWidth: 1,
+                    borderColor: 'white'
+                }]
+            }, statusChart.options); 
+            
+            // Bank Chart
+            const bankCtx = document.getElementById('bankChart').getContext('2d');
+            bankChart = createChart(bankCtx, 'bar', {
+                labels: charts.bank.labels,
+                datasets: [{
+                    label: 'Forms Processed',
+                    data: charts.bank.data,
+                    backgroundColor: charts.bank.colors
+                }]
+            }, bankChart.options); 
+        }
+
+        // Start auto-refresh
+        function startAutoRefresh() {
+            if (autoRefreshInterval) {
+                clearInterval(autoRefreshInterval);
+            }
+            // Auto-refresh interval (5 minutes)
+            autoRefreshInterval = setInterval(() => {
+                loadDashboardData();
+                console.log('Dashboard data auto-refreshed.');
+            }, 5 * 60 * 1000); 
+        }
+
+        // Set default months (last 3 months)
+        function setDefaultMonths() {
+            const currentDate = new Date();
+            const currentMonthIndex = currentDate.getMonth(); // 0-11
+            const monthNames = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            
+            const toMonth = monthNames[currentMonthIndex];
+            let fromMonthIndex = currentMonthIndex - 2;
+            if (fromMonthIndex < 0) fromMonthIndex = 0;
+            const fromMonth = monthNames[fromMonthIndex];
+            
+            document.getElementById('fromMonth').value = fromMonth;
+            document.getElementById('toMonth').value = toMonth;
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            setDefaultMonths();
+            initializeEmptyCharts();
+            loadDashboardData();
+            
+            document.getElementById('fromMonth').addEventListener('change', loadDashboardData);
+            document.getElementById('toMonth').addEventListener('change', loadDashboardData);
+            
+            console.log('Clean Dashboard initialized.');
+        });
+    </script>
+</body>
+</html>
